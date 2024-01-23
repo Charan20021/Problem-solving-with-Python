@@ -1,0 +1,26 @@
+def generate_list(a,b):
+    enda = a
+    endb = b
+    for i in range(0,1000):
+        rem = (enda+endb)%10
+        enda = endb
+        endb = rem
+        # print(endb)
+        if a==enda and b==endb:
+            return True, i
+        
+
+
+# generate_list(0,1)        
+total = 0
+for a in range(0,10):
+    for b in range(0,10):
+        # if a!=0 or b!=0:
+        res, count = generate_list(a,b)
+        if res:
+            total+=1
+            if count not in dicti:
+                dicti.append(count)
+print(dicti)
+# print(total)
+
