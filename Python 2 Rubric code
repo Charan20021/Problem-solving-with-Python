@@ -1,0 +1,49 @@
+from itertools import combinations
+import numpy as np
+import math 
+
+
+
+def generate_matrices(n):
+    tot = n*n
+    print(tot)
+    num_of_zeros= math.ceil(tot/2)
+    matrices = []
+    determinants = []
+    # Generate all combinations of 5 zeros and 4 ones
+    combinations_5_zeros = combinations(range(tot), num_of_zeros)
+    for indices in combinations_5_zeros:
+        matrix = [0] * tot
+        for idx in indices:
+            matrix[idx] = 1
+        matrices.append(matrix)
+        # Convert the list to a 3x3 NumPy array
+        matrix_array = np.array(matrix).reshape(n, n)
+        # Calculate the determinant
+        determinant = np.linalg.det(matrix_array)
+        determinants.append(determinant)
+    return matrices, determinants
+
+n = 4
+
+
+
+
+matrices, determinants = generate_matrices(n)
+
+for matrix, det in zip(matrices, determinants):
+    print("Matrix:")
+    print(np.array(matrix).reshape(n, n))
+    print("Determinant:", det)
+    print()
+
+print(f"Number of matrices with zeros: {sum(1 for det in determinants if det == 0)}")
+print(f"Number of matrices: {sum(1 for det in determinants)}")
+
+# Output the matrices and their determinants to a file
+output_file_path = "./matrices_output.txt"
+with open(output_file_path, "w") as output_file:
+    for matrix, det in zip(matrices, determinants):
+        output_file.write("Matrix:\n")
+        output_file.write(np.array(matrix).reshape(n, n).__repr__() + "\n")
+        output_file.write("Determinant: " + str(det) + "\n\n")
