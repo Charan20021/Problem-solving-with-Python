@@ -1,0 +1,27 @@
+import numpy as np
+import random
+my_dict = {}
+for i in range(0,10000):
+    my_array = np.arange(1, 2025).tolist()
+    while len(my_array)>1:
+        array_length = len(my_array)
+        random_index_1 = random.randint(0, array_length - 1)
+        # Pick the second random index (ensuring it's different from the first)
+        random_index_2 = random.randint(0, array_length - 1)
+        while random_index_2 == random_index_1:
+            random_index_2 = random.randint(0, array_length - 1)
+        diff = abs(my_array[random_index_2] - my_array[random_index_1])
+        
+        val1 = my_array[random_index_1]
+        val2 = my_array[random_index_2]
+        my_array.remove(val1)
+        my_array.remove(val2)
+        my_array.append(diff)
+    
+    if my_array[0] in my_dict:
+        my_dict[my_array[0]]+=1
+    else:
+        my_dict[my_array[0]]=1
+keys_list = list(my_dict.keys())
+keys_list.sort()
+print(keys_list)
