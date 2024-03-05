@@ -1,0 +1,63 @@
+import random
+
+
+start = 1
+count = 0
+total = 100
+for i in range(0,total):
+    start = 1
+    while start<25:
+        random_number = random.randint(1, 2)
+        start+=random_number
+        if start==25:
+            count+=1
+
+print(count)
+print(total)
+\\\\\\\\\\\\\\\\\\\\\\\
+import random
+vals = [2,3,4,5,6]
+for val in vals:
+    start = 1
+    count = 0
+    total = 100
+    for i in range(0,total):
+        start = 1
+        while start<25:
+            random_number = random.randint(1, val)
+            start+=random_number
+            if start==25:
+                count+=1
+    print("for range 1-", val)
+    print(count/total)
+    print(count)
+    print(total)
+    print("")
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+import random
+import matplotlib.pyplot as plt
+
+vals = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+probabilities = []
+for val in vals:
+    start = 1
+    count = 0
+    total = 100000
+    
+
+    for i in range(0, total):
+        start = 1
+        while start < 25:
+            random_number = random.randint(1, val)
+            start += random_number
+            if start == 25:
+                count += 1
+    prob = count / (total)  # Calculate probability up to the current iteration
+    probabilities.append(prob)
+print(len(vals))
+print(len(probabilities))
+plt.plot(vals, probabilities, marker='o')
+plt.xlabel("Range")
+plt.ylabel("Probability")
+plt.title("Probability of reaching 25")
+plt.show()
