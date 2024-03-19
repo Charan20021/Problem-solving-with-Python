@@ -1,0 +1,163 @@
+def generate_matrices_with_restriction(matrix, numbers, index):
+    n = len(matrix)
+    if index == n * n:
+        return [matrix]
+    
+    row = index // n
+    col = index % n
+    result = []
+   
+    for num in numbers:
+        if num not in matrix[row] and num not in [matrix[i][col] for i in range(n)]:
+            new_matrix = [row.copy() for row in matrix]
+            new_matrix[row][col] = num
+            result.extend(generate_matrices_with_restriction(new_matrix, [n for n in numbers if n != num], index + 1))
+    
+    return result
+
+def generate_all_matrices_with_restriction(n):
+    initial_matrix = [[0] * n for _ in range(n)]
+    numbers = list(range(1, n * n + 1))
+    return generate_matrices_with_restriction(initial_matrix, numbers, 0)
+
+def check_sum(matrix):
+    n = len(matrix)
+    # Check rows and columns
+    for i in range(n):
+        if sum(matrix[i][j] for j in range(n)) != sum(matrix[j][i] for j in range(n)) or sum(matrix[i][j] for j in range(n)) != 65:
+            return False
+    
+    # Check main diagonal
+    if sum(matrix[i][i] for i in range(n)) != 65:
+        return False
+    
+    # Check secondary diagonal
+    if sum(matrix[i][n - i - 1] for i in range(n)) != 65:
+        return False
+    
+    return True
+
+# Example usage:
+n = 5  # Change this to the desired size of the matrix
+all_matrices_with_restriction = generate_all_matrices_with_restriction(n)
+print(len(all_matrices_with_restriction))
+for idx, matrix in enumerate(all_matrices_with_restriction):
+    # for row in matrix:
+    #     print(row)
+    if (matrix[0][1] == 1):
+        if check_sum(matrix):
+            for row in matrix:
+                    print(row)
+            print(f"Matrix {idx + 1}:")
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+def generateSquare(n):
+ 
+    # 2-D array with all
+    # slots set to 0
+    magicSquare = [[0 for x in range(n)]
+                   for y in range(n)]
+ 
+    # initialize position of 1
+    i = n // 2
+    j = n - 1
+ 
+    # Fill the magic square
+    # by placing values
+    num = 1
+    while num <= (n * n):
+        if i == -1 and j == n:  # 3rd condition
+            j = n - 2
+            i = 0
+        else:
+ 
+            # next number goes out of
+            # right side of square
+            if j == n:
+                j = 0
+ 
+            # next number goes
+            # out of upper side
+            if i < 0:
+                i = n - 1
+ 
+        if magicSquare[int(i)][int(j)]:  # 2nd condition
+            j = j - 2
+            i = i + 1
+            continue
+        else:
+            magicSquare[int(i)][int(j)] = num
+            num = num + 1
+ 
+        j = j + 1
+        i = i - 1  # 1st condition
+ 
+    # Printing magic square
+    print("Magic Square for n =", n)
+    print("Sum of each row or column",
+          n * (n * n + 1) // 2, "\n")
+ 
+    rotated = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            rotated[n - j - 1][i] = magicSquare[i][j]
+    
+    magicSquare = rotated
+    for i in range(0, n):
+        for j in range(0, n):
+            print('%2d ' % (magicSquare[i][j]),
+                  end='')
+ 
+            if j == n - 1:
+                print()
+
+n = 7
+generateSquare(n)
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+def generate_matrices_with_restriction(matrix, numbers, index):
+    n = len(matrix)
+    if index == n * n:
+        return [matrix]
+    
+    row = index // n
+    col = index % n
+    result = []
+   
+    for num in numbers:
+        if num not in matrix[row] and num not in [matrix[i][col] for i in range(n)]:
+            new_matrix = [row.copy() for row in matrix]
+            new_matrix[row][col] = num
+            result.extend(generate_matrices_with_restriction(new_matrix, [n for n in numbers if n != num], index + 1))
+    
+    return result
+
+def generate_all_matrices_with_restriction(n):
+    initial_matrix = [[0] * n for _ in range(n)]
+    numbers = list(range(1, n * n + 1))
+    return generate_matrices_with_restriction(initial_matrix, numbers, 0)
+
+def check_sum(matrix):
+    n = len(matrix)
+    # Check rows and columns
+    for i in range(n):
+        if sum(matrix[i][j] for j in range(n)) != sum(matrix[j][i] for j in range(n)) or sum(matrix[i][j] for j in range(n)) != 34:
+            return False
+    
+    # Check main diagonal
+    if sum(matrix[i][i] for i in range(n)) != 34:
+    # Check secondary diagonal
+    if sum(matrix[i][n - i - 1] for i in range(n)) != 34:
+        return False
+    
+    return True
+
+# Example usage:
+n = 4  
+all_matrices_with_restriction = generate_all_matrices_with_restriction(n)
+print(len(all_matrices_with_restriction))
+for idx, matrix in enumerate(all_matrices_with_restriction):
+            print(f"Matrix {idx + 1}:")
+
+
+
+
