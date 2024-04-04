@@ -1,0 +1,471 @@
+This code displays simualtes the scenario and outputs a dataset with different values related to the scenario
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+
+def strings_old(n):
+    string_list = [str(i) for i in range(n)]
+    closed_loops = []
+    for _ in range(n):
+        a = random.choice(string_list)
+        b = random.choice(string_list)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(a)
+        else:
+            string_list.remove(a)
+            string_list.remove(b)
+            string_list.append(a+b)
+    return closed_loops
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        b = random.choices(string_list, weights = weights)[0]
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+
+    return closed_loops
+
+def eval_metrics(n, iterations):
+    
+    big_loops = 0
+    avg_loops = 0
+    avg_length = 0
+    biggest = 0
+    smallest = 0
+    
+    for i in range(iterations):
+        s = strings(n)
+        if max(s) > n/2:
+            big_loops += 1
+        avg_loops += len(s)
+        avg_length += np.mean(s)
+        biggest += max(s)
+        smallest += min(s)
+
+    big_loops /= iterations
+    avg_loops /= iterations 
+    avg_length /= iterations
+    biggest /= iterations
+    smallest /= iterations
+
+    return big_loops, avg_loops, avg_length, biggest, smallest
+
+n = 100
+iterations = 10000
+
+df = pd.DataFrame({
+    'Data': [f'P(max loop size>{int(n/2)})', 'Avg loops', 'Avg length', 'Avg max', 'Avg min'],
+    'Value': eval_metrics(n, iterations)
+})
+
+print(df)
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+This is the code for the initial overlay of plots for the average number of loops present in the bowl after the process
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+def strings_old(n):
+    string_list = [str(i) for i in range(n)]
+    closed_loops = []
+    for _ in range(n):
+        a = random.choice(string_list)
+        b = random.choice(string_list)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(a)
+        else:
+            string_list.remove(a)
+            string_list.remove(b)
+            string_list.append(a+b)
+    return closed_loops
+
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        # print(weights)
+        b = random.choices(string_list, weights = weights)[0]
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+
+    return closed_loops
+
+
+
+def eval_metrics(n, iterations):
+    
+    big_loops = 0
+    avg_loops = 0
+    avg_length = 0
+    biggest = 0
+    smallest = 0
+    
+    for i in range(iterations):
+        s = strings(n)
+        if max(s) > n/2:
+            big_loops += 1
+        avg_loops += len(s)
+        avg_length += np.mean(s)
+        biggest += max(s)
+        smallest += min(s)
+
+    big_loops /= iterations
+    avg_loops /= iterations 
+    avg_length /= iterations
+    biggest /= iterations
+    smallest /= iterations
+
+    return big_loops, avg_loops, avg_length, biggest, smallest
+
+
+
+def calculate_val(n):
+    iterations = 10000
+    big_loops, avg_loops, avg_length, biggest, smallest = eval_metrics(n, iterations)
+    df = pd.DataFrame({
+        'Data': [f'P(max loop size>{int(n/2)})', 'Avg loops', 'Avg length', 'Avg max', 'Avg min'],
+        'Value': [big_loops, avg_loops, avg_length, biggest, smallest]
+    })
+
+    print(avg_loops)
+    return avg_loops
+
+
+def series_sum(n):
+    total = 0
+    for k in range(1, n + 1):
+        total += 1 / (2 * k - 1)
+    print(total)
+    return total
+
+
+series_arr = []
+total_arr = []
+for i in range(1,50):
+    total_arr.append(calculate_val(i))
+    series_arr.append(series_sum(i))
+    print(len(total_arr))
+    print(len(series_arr))
+
+# Plotting
+plt.plot(range(1, len(total_arr)+1), total_arr, label='Individual terms')
+plt.plot(range(1, len(series_arr)+1), series_arr, label='Series sum')
+plt.xlabel('n')
+plt.ylabel('Value')
+plt.title('Series Sum and Individual Terms')
+plt.legend()
+plt.show()
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+The following plot found the number of times a particular loop appears in 1000 iterations
+
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        # print(weights)
+        b = random.choices(string_list, weights = weights)[0]
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+
+    return closed_loops
+
+
+
+def eval_metrics(n, iterations):
+    big_loops = 0
+    avg_loops = 0
+    avg_length = 0
+    biggest = 0
+    smallest = 0
+    dicti = {}
+    for i in range(iterations):
+        s = strings(n)
+        if max(s) > n/2:
+            big_loops += 1
+        avg_loops += len(s)
+        avg_length += np.mean(s)
+        biggest += max(s)
+        smallest += min(s)
+
+        for length in s:
+            if length in dicti:  # Check if length is a key in dicti
+                dicti[length] += 1
+            else:
+                dicti[length] = 1
+
+    
+    big_loops /= iterations
+    avg_loops /= iterations 
+    avg_length /= iterations
+    biggest /= iterations
+    smallest /= iterations
+
+    for key in dicti:
+        dicti[key] /= iterations
+    dicti = {k: dicti[k] for k in sorted(dicti)}
+
+    print(dicti)
+    return big_loops, avg_loops, avg_length, biggest, smallest
+
+
+
+def calculate_val(n):
+    iterations = 100
+    big_loops, avg_loops, avg_length, biggest, smallest = eval_metrics(n, iterations)
+    df = pd.DataFrame({
+        'Data': [f'P(max loop size>{int(n/2)})', 'Avg loops', 'Avg length', 'Avg max', 'Avg min'],
+        'Value': [big_loops, avg_loops, avg_length, biggest, smallest]
+    })
+
+    return avg_loops
+
+
+
+series_arr = []
+total_arr = []
+for i in range(100,101):
+    print("")
+    print(i)
+    total_arr.append(calculate_val(i))
+    # print(len(total_arr))
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+This code plots the graph of the number of loops of a particular length in 1000 iterations for n up to 50 and we can change it for n up to 100
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+def strings_old(n):
+    string_list = [str(i) for i in range(n)]
+    closed_loops = []
+    for _ in range(n):
+        a = random.choice(string_list)
+        b = random.choice(string_list)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(a)
+        else:
+            string_list.remove(a)
+            string_list.remove(b)
+            string_list.append(a+b)
+    return closed_loops
+
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        # print(weights)
+        b = random.choices(string_list, weights = weights)[0]
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+
+    return closed_loops
+
+
+
+def eval_metrics(n, iterations):
+    
+    big_loops = 0
+    avg_loops = 0
+    avg_length = 0
+    biggest = 0
+    smallest = 0
+    
+    for i in range(iterations):
+        s = strings(n)
+        if max(s) > n/2:
+            big_loops += 1
+        avg_loops += len(s)
+        avg_length += np.mean(s)
+        biggest += max(s)
+        smallest += min(s)
+
+    big_loops /= iterations
+    avg_loops /= iterations 
+    avg_length /= iterations
+    biggest /= iterations
+    smallest /= iterations
+
+    return big_loops, avg_loops, avg_length, biggest, smallest
+
+
+
+def calculate_val(n):
+    iterations = 10000
+    big_loops, avg_loops, avg_length, biggest, smallest = eval_metrics(n, iterations)
+    df = pd.DataFrame({
+        'Data': [f'P(max loop size>{int(n/2)})', 'Avg loops', 'Avg length', 'Avg max', 'Avg min'],
+        'Value': [big_loops, avg_loops, avg_length, biggest, smallest]
+    })
+    return avg_length
+
+
+
+avg_len = []
+for i in range(1,50):
+    avg_len.append(calculate_val(i))
+
+# Plotting
+plt.plot(range(1, len(avg_len)+1), avg_len, label='Average Length')
+plt.xlabel('n')
+plt.ylabel('Value')
+plt.title('Series Sum and Individual Terms')
+plt.legend()
+plt.show()
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+The following code also plots the linear functions (n\2 and n\4) alongside my earlier plot
+
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+def strings_old(n):
+    string_list = [str(i) for i in range(n)]
+    closed_loops = []
+    for _ in range(n):
+        a = random.choice(string_list)
+        b = random.choice(string_list)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(a)
+        else:
+            string_list.remove(a)
+            string_list.remove(b)
+            string_list.append(a+b)
+    return closed_loops
+
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        # print(weights)
+        b = random.choices(string_list, weights = weights)[0]
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+
+    return closed_loops
+
+
+
+def eval_metrics(n, iterations):
+    
+    big_loops = 0
+    avg_loops = 0
+    avg_length = 0
+    biggest = 0
+    smallest = 0
+    
+    for i in range(iterations):
+        s = strings(n)
+        if max(s) > n/2:
+            big_loops += 1
+        avg_loops += len(s)
+        avg_length += np.mean(s)
+        biggest += max(s)
+        smallest += min(s)
+
+    big_loops /= iterations
+    avg_loops /= iterations 
+    avg_length /= iterations
+    biggest /= iterations
+    smallest /= iterations
+
+    return big_loops, avg_loops, avg_length, biggest, smallest
+
+
+
+def calculate_val(n):
+    iterations = 10000
+    big_loops, avg_loops, avg_length, biggest, smallest = eval_metrics(n, iterations)
+    df = pd.DataFrame({
+        'Data': [f'P(max loop size>{int(n/2)})', 'Avg loops', 'Avg length', 'Avg max', 'Avg min'],
+        'Value': [big_loops, avg_loops, avg_length, biggest, smallest]
+    })
+    return avg_length
+
+def func(n):
+    return n/2
+
+avg_len = []
+func_arr = []
+for i in range(1,100):
+    avg_len.append(calculate_val(i))
+    func_arr.append(func(i))
+    
+# Plotting
+plt.plot(range(1, len(avg_len)+1), avg_len, label='Average Length')
+plt.plot(range(1, len(avg_len)+1), func_arr, label='Average Length')
+plt.xlabel('n')
+plt.ylabel('Value')
+plt.title('Average Length of Loops')
+plt.legend()
+plt.show()
