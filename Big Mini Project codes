@@ -469,3 +469,78 @@ plt.ylabel('Value')
 plt.title('Average Length of Loops')
 plt.legend()
 plt.show()
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+This code plots the average number of tries till we see the first loop and the average length of that first loop
+
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
+import random
+def strings_old(n):
+    string_list = [str(i) for i in range(n)]
+    closed_loops = []
+    for _ in range(n):
+        a = random.choice(string_list)
+        b = random.choice(string_list)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(a)
+        else:
+            string_list.remove(a)
+            string_list.remove(b)
+            string_list.append(a+b)
+    return closed_loops
+
+
+def strings(n):
+    string_list = [[i] for i in range(n)]
+    closed_loops = []
+
+    for _ in range(n):
+        a = random.choice(string_list)
+        weights = [2 for _ in range(len(string_list))]
+        weights[string_list.index(a)] -= 1
+        b = random.choices(string_list, weights = weights)[0]
+        # print(n)
+        if a == b:
+            string_list.remove(a)
+            closed_loops.append(len(a))
+            break
+        else:
+            string_list.remove(b)
+            for element in b:
+                a.append(element)
+    return closed_loops[0], _
+
+def eval_metrics(n, iterations):
+    avg_num = 0
+    avg_len = 0
+    for i in range(iterations):
+        length, s = strings(n)
+        avg_num+=s
+        avg_len+=length
+    avg_num /= iterations
+    avg_len /= iterations
+    return avg_len, avg_num
+
+iterations = 10000
+avg_num = []
+avg_len = []
+for n in range(1,50):
+    avgl, avgn = eval_metrics(n, iterations)
+    avg_num.append(avgn)
+    avg_len.append(avgl)
+
+
+plt.plot(range(1, len(avg_num)+1), avg_num, label='Average Number of Tries for First Loop')
+plt.plot(range(1, len(avg_len)+1), avg_len, label='Average Length of First Logic')
+plt.xlabel('n')
+plt.ylabel('Value')
+plt.title('Series Sum and Individual Terms')
+plt.legend()
+plt.show()
+
+
+
+
